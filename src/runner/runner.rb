@@ -1,3 +1,5 @@
+# Class that defines the execution of each test in a generic manner
+
 require 'yaml'
 require_relative 'Testbase.rb'
 
@@ -53,21 +55,17 @@ class Runner
                         reason='NA'
                         btrace='NA'
                         status='pass'
-                        #report_collector(resclass,i,'pass'," ",start_time," ")
                     rescue Exception => e
-                        #failure=testcase.get_failures
                         btrace=e.backtrace.inspect
                         failed=testcase.instance_variable_get(:@fail)
                         if failed
                             puts "Test failed,#{failed}"
                             status='fail'
                             reason=failed
-                            #report_collector(resclass,i,'fail',failed,start_time,btrace)
                         else
-                            puts "Test case failed,Error : #{e}"
+                            puts "Test case failed, Error: #{e}"
                             status='error'
                             reason=e
-                            #report_collector(resclass,i,'error',e,start_time,btrace)
                         end
                     end
 
@@ -89,19 +87,19 @@ class Runner
                     status='fail'
                     reason=failed
                 else
-                    puts "Test Class execution failed,Error : #{e}"
+                    puts "Test Class execution failed, Error: #{e}"
                     status='skipped'
                     reason=e
                 end
                 for i in testcases
-                    report_collector(resclass,i,status,"Class_Error : #{reason}",nil,btrace)
+                    report_collector(resclass,i,status,"Class_Error: #{reason}",nil,btrace)
                 end
             end
 
             begin
                 rescase.posttest_cleanup
             rescue Exception => e
-                puts "Test class cleanup failed,execution continued "
+                puts "Test class cleanup failed, execution continued."
             end
         end
     end
@@ -136,7 +134,7 @@ class Runner
         begin
             $test_config=YAML::load(YAML::load_file(config_file))
         rescue Exception => e
-            puts "Errror : #{e}  while loading the config file,please specify valid yaml file"
+            puts "Error: #{e} while loading the configuration file, please specify valid yaml file"
         end
     end
 

@@ -21,7 +21,7 @@ class Collector
             known_objects=[Testbase::Test, Testbase]
             new_classes = ObjectSpace.each_object(Class).to_a - existing_classes
         rescue Exception => e
-            puts "Error : #{e} ,while collecting test class for file #{file} hence skipping "
+            puts "Error: #{e}, while collecting test classes for file #{file}, hence skipping."
             return []
         end
         classes_found=new_classes-known_objects
@@ -52,7 +52,7 @@ class Collector
     def collect(path_list)
         files_list=collect_file_list(path_list)
         if files_list.empty?
-            raise "No ruby files found for execution, please recheck the file path specified"
+            raise "No ruby files found for execution, please re-check the file path specified"
             return
         end
 
@@ -65,7 +65,7 @@ class Collector
 
         test_collection=collect_tests(class_collection)
         if test_collection.empty?
-            raise "No executable test classes found, pleas check the test classes in path specified "
+            raise "No executable test classes found, please check the test classes in path specified "
         end
 
         return test_collection

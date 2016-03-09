@@ -25,7 +25,7 @@ opts.each do |opt, arg|
       --config:
           Specify the test config yml file you want to access as hash variable,this can be accessed as $test_config . ex :--config='config.yml'
       --env:
-          Specify the test environment variable,this can be accessed as $env. ex : --env='production'
+          Specify the test environment variable,this can be accessed as $env. ex : --env='test'
       EOF
       exit
     when '--files'
