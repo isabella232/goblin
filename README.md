@@ -16,6 +16,8 @@ Why should you use Goblin?
 --------------
 Provides a framework for running resiliency tests reliably, comes packed with a set of defined tests, and allows extension based on new needs. Ability to integrate tests via Jenkins and post execution steps on a HipChat room.
 
+Currently supported components - Zookeeper, Couchbase, RabbitMQ, MongoDB, Cassandra
+
 Getting Started
 --------------
 
