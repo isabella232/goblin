@@ -1,5 +1,6 @@
-# Wrapper class for HipChat APIs to be used within Quilt
-# Methods defined to send a message to a given HipChat room, to send a message to a particular user using '@', to add a given user to a given room
+# Wrapper class for HipChat APIs to be used
+# Methods defined to send a message to a given HipChat room, to send a message to a particular user using '@', 
+# to add a given user to a given room
 # Text colorize options may be overridden
 
 require 'net/http'
@@ -29,5 +30,4 @@ class HipChat
     http = Net::HTTP.new('https://api.hipchat.com')
     http.send_request('PUT', path)
   end
-
 end
