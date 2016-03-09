@@ -29,13 +29,13 @@ Getting Started
 ### Use the examples as a starting point
 
 - cd src/tests/examples
-- Create a new test .rb file for your component or use the provided TestZookeeperSample.rb example as a reference.
+- Create a new test .rb file for your component or use the provided TestSample.rb example as a reference.
 - Make sure to override the validate, simulate_failure, and recover methods from TestBase in the inner Test classes.
 - Create a directory under resources/environments/ or use the provided example
 - Create a configuration file or update the example provided in resources/environments/example/config.yml
 - Update the HipChat token/room if you have one.
 - Create a test bed configuration file or update the example provided in resources/environments/example/nodes.yml and add your own server details. Update the encoded server password using utils/Encode_password.rb
-- Run the script using: cd src/runner; ruby launcher.rb --files='../../src/tests/examples/TestZookeeperSample.rb'
+- Run the script using: cd src/runner; ruby launcher.rb --files='../../src/tests/examples/TestSample.rb'
 
 What can you do with Goblin?
 --------------
