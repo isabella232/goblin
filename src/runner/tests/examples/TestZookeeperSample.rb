@@ -13,7 +13,7 @@ require_relative "../../utils/chat_tools/HipChat.rb"
 class SampleTest1 < Testbase
 
   def pretest_setup
-    puts "inside setup"
+    puts "Inside Pre-test Setup Suite 1"
     
     currentDir = File.dirname(File.expand_path(__FILE__)) 
     puts currentDir
@@ -23,7 +23,6 @@ class SampleTest1 < Testbase
     $env_path = $constants.ENV_PATH
     $testBed = TestBed.new($env_path, $env)
     $token = $testBed.get_token
-    puts $token
     
     $room = $testBed.get_room
     $hip = HipChat.new($token,$room) 
@@ -32,32 +31,36 @@ class SampleTest1 < Testbase
   end
 
   def posttest_cleanup
-    puts "inside cleanup"
+    puts "Inside Post-test Clean up"
   end
 
   
   def generate_load
-      puts "inside generate_load"
+      puts "Inside generate_load Suite 1"
   end
 
   class Test1 < Testbase::Test
     GROUP=['sanity']
     
     def recover
-      puts "inside recover T1"
+      puts "Inside Recover Test1"
     end
 
     def simulate_failure
-      puts "inside simulate_failure T1"
+      puts "Inside simulate_failure Test1"
+      
+      # obtain the node ssh handles
       $nodes = $testBed.get_nodes("ZK")
+      
+      # use the Zookeeper library function to stop the exhibitor process on first node
       $zookeeper.exhibitor_node_stop($nodes[0])
     end
       
     def validate
-      puts "inside validate - before assert T1"
+      puts "Inside validate - before assert Test1"
       #fail("FAIL..... HEheh...!!!")
       #assert(1==2,"failed")
-      puts "inside validate - after assert"
+      puts "Inside validate - after assert Test1"
 
     end
   end
@@ -66,19 +69,23 @@ class SampleTest1 < Testbase
     GROUP=['sanity','regress']
     
     def recover
-      puts "inside recover T2"
+      puts "Inside Recover Test2"
     end
 
     def simulate_failure
-      puts "inside simulate_failure T2"
+      puts "Inside simulate_failure Test2"
+      
+      # obtain the node ssh handles
       $nodes = $testBed.get_nodes("ZK")
+      
+      # use the Zookeeper library function to restart the exhibitor process on first node
       $zookeeper.exhibitor_node_start($nodes[0])
     end
       
     def validate
-      puts "inside validate - before assert T2"
+      puts "Inside validate - before assert Test2"
       #assert(1==2,"failed")
-      puts "inside validate - after assert T2"
+      puts "Inside validate - after assert Test2"
     end
 
   end 
@@ -89,7 +96,7 @@ class SampleTest2 < Testbase
 
 
   def pretest_setup
-    puts "inside cleanup SampleTest2"
+    puts "Inside Pre-test Cleanup Suite 2"
     currentDir = File.dirname(File.expand_path(__FILE__))
     Dir.chdir(currentDir)          
         
@@ -105,12 +112,12 @@ class SampleTest2 < Testbase
   end
 
   def posttest_cleanup
-    puts "inside cleanup SampleTest2"
+    puts "Inside Post test Cleanup Suite 2"
   end
 
   
   def generate_load
-      puts "inside generate_load SampleTest2"
+      puts "Inside generate_load Suite 2"
   end
 
   class Test1 < Testbase::Test
@@ -120,20 +127,22 @@ class SampleTest2 < Testbase
     end
 
     def recover
-      puts "inside recover"
+      puts "Inside recover Test1"
       #fail('HOOOOOO')
       #raise "YYAAAA"
     end
 
     def simulate_failure
-      puts "inside simulate_failure"
+      puts "Inside simulate_failure Test1"
+      
+      # get node handles of type Couchbase and restart the cluster
       @couchbase.cluster_restart(@testBed.get_nodes("CB"))
     end
       
     def validate
-      puts "inside validate - before assert"
+      puts "Inside validate - before assert Test1"
       #assert(1==2,"failed")
-      puts "inside validate - after assert"
+      puts "Inside validate - after assert Test1"
     end
   end   
 end
