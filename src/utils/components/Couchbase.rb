@@ -8,7 +8,7 @@ require "net/ssh"
 
 class Couchbase
   
-  def node_restart(node)
+  def cb_server_restart(node)
     node.handle.exec!("echo #{node.password} | sudo -S -p '' service couchbase-server restart")
   end
    
@@ -26,7 +26,7 @@ class Couchbase
     end
   end
   
-  def node_stop(node)
+  def cb_server_stop(node)
     node.handle.exec!("echo #{node.password} | sudo -S -p '' service couchbase-server stop")
   end
    
@@ -44,7 +44,7 @@ class Couchbase
     end
   end
 
-  def node_start(node)
+  def cb_server_start(node)
     node.handle.exec!("echo #{node.password} | sudo -S -p '' service couchbase-server start")
   end
    
