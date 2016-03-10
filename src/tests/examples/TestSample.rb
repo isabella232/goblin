@@ -7,8 +7,8 @@ require_relative "../../utils/components/Couchbase.rb"
 require_relative "../../utils/env/TestBed.rb"
 require_relative "../../utils/chat_tools/HipChat.rb"
 
-# ruby launcher.rb [../**/*.rb] [test-group] [test-group] [yml config which will be loaded to a hash]
-# ruby launcher.rb --files='../../src/tests/examples/TestZookeeperSample.rb'
+# ruby launcher.rb [../**/*.rb] [test-group] [--env=''] [yml config which will be loaded to a hash]
+# ruby launcher.rb --files='../../src/tests/examples/TestSample.rb' --env='example'
 
 class SampleTest1 < Testbase
 
@@ -16,10 +16,8 @@ class SampleTest1 < Testbase
     puts "Inside Pre-test Setup Suite 1"
     
     currentDir = File.dirname(File.expand_path(__FILE__)) 
-    puts currentDir
     Dir.chdir(currentDir)    
     $constants = Constants.new
-    puts $constants.inspect
     $env_path = $constants.ENV_PATH
     $testBed = TestBed.new($env_path, $env)
     $token = $testBed.get_token
@@ -53,7 +51,7 @@ class SampleTest1 < Testbase
       $nodes = $testBed.get_nodes("ZK")
       
       # use the Zookeeper library function to stop the exhibitor process on first node
-      $zookeeper.exhibitor_node_stop($nodes[0])
+      $zookeeper.exhibitor_stop($nodes[0])
     end
       
     def validate
@@ -79,7 +77,7 @@ class SampleTest1 < Testbase
       $nodes = $testBed.get_nodes("ZK")
       
       # use the Zookeeper library function to restart the exhibitor process on first node
-      $zookeeper.exhibitor_node_start($nodes[0])
+      $zookeeper.exhibitor_restart($nodes[1])
     end
       
     def validate
@@ -102,13 +100,13 @@ class SampleTest2 < Testbase
         
     $constants = Constants.new
     $env_path = $constants.ENV_PATH
-    @testBed = TestBed.new($env_path, $environment)  
+    $testBed = TestBed.new($env_path, $env)  
           
-    $token = @testBed.get_token
-    $room = @testBed.get_room
+    $token = $testBed.get_token
+    $room = $testBed.get_room
     $hip = HipChat.new($token,$room)   
            
-    @couchbase = Couchbase.new  
+    $couchbase = Couchbase.new  
   end
 
   def posttest_cleanup
@@ -136,7 +134,7 @@ class SampleTest2 < Testbase
       puts "Inside simulate_failure Test1"
       
       # get node handles of type Couchbase and restart the cluster
-      @couchbase.cluster_restart(@testBed.get_nodes("CB"))
+      $couchbase.cluster_restart($testBed.get_nodes("CB"))
     end
       
     def validate
