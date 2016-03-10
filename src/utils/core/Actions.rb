@@ -1,4 +1,6 @@
-class Command_Executor
+# Class that defines node specific actions that can be performed in order to induce faults
+
+class Actions
 
   def linux_reboot(node)
     node.handle.exec!("echo #{node.password} | sudo -S -p '' shutdown -r now")
