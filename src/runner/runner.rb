@@ -114,7 +114,7 @@ class Runner
       end
     end
 
-    result={ "class" => resclass.to_s , "testcase" => testcase.to_s , "status" => status.to_s , "reason" => reason.to_s ,"time" => execution_time ,"backtrace"=>btrace }
+    result={ "class" => resclass.to_s , "testcase" => testcase.to_s , "status" => status.to_s , "reason" => reason.to_s ,"time(secs)" => execution_time ,"backtrace"=>btrace }
     @@report[testcase.to_s]=result
   end
 

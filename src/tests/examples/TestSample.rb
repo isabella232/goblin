@@ -3,6 +3,7 @@ require_relative "../../runner/Testbase.rb"
 require_relative "../../utils/core/Constants.rb"
 require_relative "../../utils/components/Zookeeper.rb"
 require_relative "../../utils/components/Couchbase.rb"
+require_relative "../../utils/core/Actions.rb"
 
 require_relative "../../utils/env/TestBed.rb"
 require_relative "../../utils/chat_tools/HipChat.rb"
@@ -107,6 +108,7 @@ class SampleTest2 < Testbase
     $hip = HipChat.new($token,$room)   
            
     $couchbase = Couchbase.new  
+    $actions = Actions.new
   end
 
   def posttest_cleanup
@@ -142,5 +144,37 @@ class SampleTest2 < Testbase
       #assert(1==2,"failed")
       puts "Inside validate - after assert Test1"
     end
-  end   
+  end  
+  
+  class Test2 < Testbase::Test
+    GROUP =['sanity','regression']
+    def group
+      return ["sanity","regression"]
+    end
+
+    def recover
+      puts "Inside recover Test2"
+      #stop packet loss
+      $actions.stop_packet_loss($nodes[0], 'eth0')
+      #fail('YUDoThis')
+      #assert(1==2,"failed")
+    end
+
+    def simulate_failure
+      puts "Inside simulate_failure Test1"
+      
+      # get node handles of type Couchbase
+      $nodes = $testBed.get_nodes("CB")
+      # introduce 50% packet loss on eth0 interface between the node whose handle is given & dest_ip
+      $actions.packet_loss($nodes[0], '10.5.108.51', 50, 'eth0')
+    end
+      
+    def validate
+      sleep 20
+      puts "Inside validate - before assert Test1"
+      #assert(1==2,"failed")
+      puts "Inside validate - after assert Test1"
+    end
+  end  
+   
 end
