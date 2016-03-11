@@ -165,8 +165,8 @@ class SampleTest2 < Testbase
       
       # get node handles of type Couchbase
       $nodes = $testBed.get_nodes("CB")
-      # introduce 50% packet loss on eth0 interface between the node whose handle is given & dest_ip
-      $actions.packet_loss($nodes[0], '10.5.108.51', 50, 'eth0')
+      # introduce 50% packet loss on eth0 interface between CB node1 & 1.2.3.4
+      $actions.packet_loss($nodes[0], '1.2.3.4', 50, 'eth0')
     end
       
     def validate
