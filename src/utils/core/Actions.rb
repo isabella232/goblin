@@ -1,6 +1,10 @@
 # Class that defines node specific actions that can be performed in order to induce faults
 
 class Actions
+  
+  def kill_service(node, service)
+    puts node.handle.exec!("echo #{node.password} | sudo -S -p '' kill -9 $(echo #{node.password} | sudo -S -p '' ps -ef | grep #{service} | grep -v grep | awk '{print $2}')")
+  end
 
   def linux_reboot(node)
     node.handle.exec!("echo #{node.password} | sudo -S -p '' shutdown -r now")
