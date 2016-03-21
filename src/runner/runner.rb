@@ -1,6 +1,7 @@
 # Class that defines the execution of each test in a generic manner
 
 require 'yaml'
+require 'nokogiri'
 
 require_relative 'Testbase.rb'
 
@@ -103,18 +104,18 @@ class Runner
   #report collector
   def report_collector(resclass,testcase,status,reason,start_time,btrace)
     if @class_start_time
-      execution_time=(Time.now-@class_start_time).to_i
+      execution_time=(Time.now-@class_start_time).round(2)
       @class_start_time=nil
     else
       if start_time
-        execution_time=(Time.now-start_time).to_i
+        execution_time=(Time.now-start_time).round(2)
       else
-        execution_time=0
+        execution_time=0.00
         btrace='NA'
       end
     end
 
-    result={ "class" => resclass.to_s , "testcase" => testcase.to_s , "status" => status.to_s , "reason" => reason.to_s ,"time(secs)" => execution_time ,"backtrace"=>btrace }
+    result={ "class" => resclass.to_s , "testcase" => testcase.to_s , "status" => status.to_s , "reason" => reason.to_s ,"time" => execution_time ,"backtrace"=>btrace }
     @@report[testcase.to_s]=result
   end
 
@@ -133,5 +134,60 @@ class Runner
       puts "Error: #{e} while loading the configuration file, please specify valid yaml file"
     end
   end
+
+  def generate_report(result)
+      skipped=0
+      passed=0
+      failed=0 
+      time=0
+      for k,v in result
+          if result[k]['status']=='pass'
+              passed += 1
+          elsif result[k]['status']=='fail' or result[k]['status']=='error'
+              failed += 1
+          elsif result[k]['status']=='skipped'
+              skipped += 1
+          else
+              puts "skipping the result,malformed status"
+          end
+          time += result[k]['time']
+      end
+
+      return passed,failed,skipped,time
+
+  end
+
+  def generate_junit_xml(result)
+      passed,failed,skipped,time=generate_report(result)
+      total=passed+skipped+failed
+      suite=Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
+          xml.testsuite(:failures=>failed ,:name=>"Goblin Test results" ,:skipped=>skipped ,:tests=>total,:time=>time){
+              for k,v in result
+                  testcase= result[k]['testcase'].split('::')[-1]
+                  if result[k]['status']=="pass"
+                      xml.testcase(:classname=>result[k]['class'] ,:name=>testcase,:time=>result[k]["time"]){
+                          xml.send (:"system-out"){ 
+                              xml.cdata "Passed"
+                          }
+                      }
+                  elsif result[k]['status']=="fail" or result[k]['status']=='error'
+                      xml.testcase(:classname=>result[k]['class'] ,:name=>testcase,:time=>result[k]["time"]){
+                          xml.failure(:message=>result[k]['backtrace'][0]){
+                              xml.cdata result[k]['backtrace']
+                          }
+                      }
+                  elsif result[k]['status']=='skipped'
+                      xml.testcase(:classname=>result[k]['class'] ,:name=>testcase,:time=>result[k]["time"]){
+                          xml.send(:"skipped")
+                      }
+                  else
+                      puts "skipping"
+                  end   
+              end 
+          }
+      end
+      return suite.to_xml
+  end
+
 
 end
