@@ -1,6 +1,7 @@
 # Class that initiates the collection and running of required test cases
 
 require 'getoptlong'
+require 'yaml'
 
 require_relative 'runner.rb'
 require_relative 'collector.rb'
@@ -43,8 +44,10 @@ end
 current_path=File.expand_path(File.dirname(__FILE__))
 
 #collector logic
+puts "\n Starting Test collection \n"
 collector=Collector.new
 test_collection=collector.collect($files)
+puts "\n Test collection finished \n "
 
 #runner logic
 runner=Runner.new
@@ -53,8 +56,23 @@ if $config
 end
 
 #generate report
+puts "\n Starting Test Execution \n "
 report=runner.run(test_collection,$group)
-puts "Find results in goblin_report yml file"
+puts "\n Test Execution Finished \n "
+
+passed,failed,skipped,time=runner.generate_report(report)
+puts  "\n ++++++++++++++++++++ Test Results ++++++++++++++++++ "
+puts  "\n Test cases ""Passed : #{passed} , Failed : #{failed} , Skipped : #{skipped} , Time : #{time.round(1)} sec "
+puts "\n ++++++++++++++++++++ Test Results ++++++++++++++++++ \n"
+puts "\n Find detailed results in goblin_report yml file ,also find junit.xml for xml report \n \n "
+
+#generate junit xml
+xml_data=runner.generate_junit_xml(report)
+junit_file="junit-report.xml"
+file_path=File.join(current_path,junit_file)
+file = File.new(file_path, "wb")
+file.write(xml_data)
+file.close
 
 #report file path
 t=Time.now.to_i
