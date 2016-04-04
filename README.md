@@ -6,7 +6,7 @@ Goblin
 
 What is Goblin?
 --------------
-Automated resiliency testing framework for Cloud Applications
+A framework for automating resiliency testcases of cloud deployments. It is implemented in [ruby](https://www.ruby-lang.org/), inspired by various other testing frameworks like [testng](https://en.wikipedia.org/wiki/TestNG), [junit](https://en.wikipedia.org/wiki/JUnit), [ruby-testunit](https://en.wikibooks.org/wiki/Ruby_Programming/Unit_testing) etc. The design goal of Goblin is to provide more features specific to resiliency testing. It is built on top of our decades of experience with various test automation frameworks and resiliency test tooling. Goblin also comes with some out of the box libraries which helps you get started easily.
 
 Where can you use Goblin?
 --------------
@@ -16,7 +16,7 @@ Why should you use Goblin?
 --------------
 Provides a framework for running resiliency tests reliably, comes packed with a set of defined tests, and allows extension based on new needs. Ability to integrate tests via Jenkins and post execution steps on a HipChat room.
 
-Currently supported components - Zookeeper, Couchbase, RabbitMQ, MongoDB, Cassandra
+Current out of the box libraries - Zookeeper, Couchbase, RabbitMQ, MongoDB, Cassandra
 
 Getting Started
 --------------
