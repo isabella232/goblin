@@ -78,6 +78,7 @@ Other Ruby gems in use
 - fileutils
 - csv
 - json
+- nokogiri
 
 Future
 --------------
